@@ -117,15 +117,15 @@
             <h2>Koszt rozwoju Cech i Umiejętności (PD)</h2>
             <div class="table-wrap">
               <table class="tbl" id="tblDev">
-                <thead>
-                  <tr>
-                    <th>Rozwinięcia</th>
-                    <th>Cechy</th>
-                    <th>Umiejętności</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
+  <thead>
+    <tr>
+      <th>Rozwinięcia</th>
+      <th>Cechy</th>
+      <th>Umiejętności</th>
+    </tr>
+  </thead>
+  <tbody id="tblDevBody"></tbody>
+</table>
             </div>
 
           
@@ -201,7 +201,7 @@
           <tr><td>2</td><td>10</td></tr>
           <tr><td>3</td><td>15</td></tr>
           <tr><td>4</td><td>20</td></tr>
-        </tbody>edas
+        </tbody>
       </table>
     </div>
   </div>
@@ -345,7 +345,26 @@
       </div>
     </div>
   </div>
+<!-- STATE CARD MODAL -->
+<div class="modal is-hidden" id="stateCardModal" role="dialog" aria-modal="true" aria-labelledby="stateCardTitle">
+  <div class="modal-backdrop" id="stateCardBackdrop"></div>
 
+  <div class="modal-card">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="stateCardTitle">Podgląd karty</div>
+        <div class="modal-sub muted small" id="stateCardSub">Pełna karta PNG</div>
+      </div>
+      <button class="icon-btn" id="btnCloseStateCard" aria-label="Zamknij podgląd" title="Zamknij">
+        <span class="xmark" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <img id="stateCardImg" alt="Pełna karta stanu" style="width:100%; height:auto; border-radius:12px;">
+    </div>
+  </div>
+</div>
   <script src="app.js"></script>
 </body>
 </html>

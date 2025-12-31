@@ -516,15 +516,46 @@ input[type="number"]{
   gap:10px;
 }
 .state summary::-webkit-details-marker{display:none}
+/* --- Tag colors (badge variants) --- */
 .badge{
   font-size:12px;
-  color: var(--gold);
-  border:1px solid rgba(199,164,85,.35);
-  background: rgba(199,164,85,.08);
+  font-weight: 900;
   padding: 4px 10px;
   border-radius: 999px;
   white-space:nowrap;
+  border:1px solid rgba(199,164,85,35);
+  background: rgba(199,164,85,08);
+  color: var(--gold);
 }
+
+/* Czerwony: Walka */
+.badge--red{
+  color: #ffd8d8;
+  border-color: rgba(161,58,58,.45);
+  background: rgba(161,58,58,.18);
+}
+
+/* Żółty: Psychika */
+.badge--yellow{
+  color: #fff0c9;
+  border-color: rgba(199,164,85,.55);
+  background: rgba(199,164,85,.18);
+}
+
+/* Niebieski: Statusy (krwawienie, podpalenie...) */
+.badge--blue{
+  color: #d9e8ff;
+  border-color: rgba(108,126,162,.55);
+  background: rgba(108,126,162,.20);
+}
+
+/* Zielony: Postaciowe (szczęście/bohater, rozmiar, zepsucie...) */
+.badge--green{
+  color: #d6ffe6;
+  border-color: rgba(70,170,120,.55);
+  background: rgba(70,170,120,.18);
+}
+
 .state .content{
   padding: 0 12px 12px;
   color: var(--muted);
@@ -606,7 +637,109 @@ input[type="number"]{
   gap:10px;
   flex-wrap:wrap;
 }
+/* --- States: icon + actions --- */
+.state summary{
+  position: relative;
+}
 
+.state-summary-left{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  min-width: 0;
+}
+
+.state-icon{
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(199,164,85,.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  flex: 0 0 auto;
+  margin-top: 2px; /* “lewy górny róg” wizualnie */
+}
+
+.state-icon img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display:block;
+}
+
+/* blok tekstu w summary */
+.state-title-wrap{
+  min-width: 0;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.state-title-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.state-actions{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex: 0 0 auto;
+}
+
+.icon-mini{
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  border:1px solid var(--line);
+  background: rgba(21,26,35,.45);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.icon-mini:hover{filter:brightness(1.08)}
+
+/* prosta ikonka “karty” bez SVG */
+.icon-card{
+  width:16px;
+  height:18px;
+  border-radius: 3px;
+  border: 2px solid rgba(199,164,85,.85);
+  position: relative;
+  box-sizing: border-box;
+}
+.icon-card::after{
+  content:"";
+  position:absolute;
+  left:3px; right:3px;
+  top:5px;
+  height:2px;
+  background: rgba(199,164,85,.65);
+  box-shadow: 0 5px 0 rgba(199,164,85,.45), 0 10px 0 rgba(199,164,85,.30);
+  border-radius: 2px;
+}
+
+/* Modal pod obrazek */
+.modal-card--img{
+  width: min(820px, calc(100% - 24px));
+}
+
+.modal-body--img{
+  padding: 0;
+}
+
+.modal-body--img img{
+  width: 100%;
+  height: auto;
+  display:block;
+  background: rgba(9,11,14,.65);
+}
 /* Switch */
 .switch{
   position: relative;
