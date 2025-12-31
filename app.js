@@ -55,7 +55,8 @@
   // ---------- State ----------
   let opMode = "spend"; // "spend" | "add"
   let calc = 0;
-
+let calcHistory = [];
+const CALC_HISTORY_LIMIT = 10;
   let settings = { autoApply: true }; // default ON
 
   // ---------- Elements (resolved after DOM ready) ----------
@@ -206,6 +207,9 @@
       if (node) node.classList.toggle("is-active", key === name);
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
+    // aktywny stan dla szybkich skrótów (nowa nawigacja)
+  els.quickButtons?.forEach(b => b.classList.toggle("is-active", b.dataset.jump === name));
+
   }
 
   // ---------- Segmented mode ----------
@@ -280,13 +284,39 @@
 
   // ---------- Mini calculator ----------
   function renderCalc() {
-    if (els.calcValue) els.calcValue.textContent = String(calc);
+  if (els.calcValue) els.calcValue.textContent = String(calc);
+
+  if (els.calcHistory) {
+    els.calcHistory.innerHTML = calcHistory.map(h => `
+      <div class="hrow">
+        <span class="hdelta ${h.delta >= 0 ? "plus" : "minus"}">
+          ${h.delta >= 0 ? "+" : ""}${h.delta}
+        </span>
+        <span class="muted">${h.after}</span>
+      </div>
+    `).join("");
   }
+}
 
   function addCalc(delta) {
-    calc = Math.trunc(calc + delta);
-    renderCalc();
-  }
+  const before = calc;
+  calc = Math.trunc(calc + delta);
+
+  calcHistory.unshift({
+    delta,
+    after: calc
+  });
+
+  if (calcHistory.length > CALC_HISTORY_LIMIT) calcHistory.pop();
+
+  renderCalc();
+}
+function resetCalc() {
+  calc = 0;
+  calcHistory = [];
+  if (els.calcCustomInput) els.calcCustomInput.value = "0";
+  renderCalc();
+}
 
   // ---------- PD table (podgląd) ----------
   const DEV_COSTS = [
@@ -406,7 +436,7 @@ const SORT = {
   {
     id: "krytyki",
     name: "KRYTYKI",
-    tag: "status",
+    tag: "fight",
     icon: "assets/icons/krytyki_icon.png",
     cardImg: "assets/cards/krytyki.png",
     text: "Rany Krytyczne (RK): kiedy powstają (trafienie krytyczne lub spadek Żyw do 0), jak ustala się miejsce trafienia, zasady tabel RK i co oznacza rana powierzchowna."
@@ -422,11 +452,29 @@ const SORT = {
   {
     id: "mocna-glowa",
     name: "MOCNA GŁOWA",
-    tag: "status",
+    tag: "rule",
     icon: "assets/icons/mocna głowa_icon.png",
     cardImg: "assets/cards/mocna głowa.png",
     text: "Alkohol: Test Mocnej Głowy – udany daje „wstawienie”, nieudany „upicie” z karami. Trzeźwienie po czasie (testy), możliwy „abstynent” w sytuacjach społecznych."
   },
+  {
+  id: "zepsucie",
+  name: "ZEPSUCIE",
+  tag: "rule",
+  icon: "assets/icons/zepsucie_icon.png",
+  cardImg: "assets/cards/zepsucie.png",
+  text:
+    "Źródło spaczenia: kontakt ze Źródłem / negatywne emocje / okrucieństwo → grozi PZ. " +
+    "Test zależnie od źródła: Psychiczne = Opanowanie (+0), Fizyczne = Odporność (+0). " +
+    "Próg sukcesu: potrzebujesz +X PS (wg Siły Źródła), aby uniknąć PZ. " +
+    "Siła 1 (Pomniejsze): +0 PS = 0 PZ; inaczej 1 PZ. " +
+    "Siła 2 (Umiarkowane): +0/+1 PS = 1 PZ; +2 PS = 0 PZ; inaczej 2 PZ. " +
+    "Siła 3 (Potężne): +0/+1 PS = 2 PZ; +2/+3 PS = 1 PZ; +4 PS = 0 PZ; inaczej 3 PZ. " +
+    "Mroczne Pakty: możesz przerzucić test za +1 PZ. " +
+    "Mroczne Podszepty: za −1 PZ MG może sugerować działania Chaosu. " +
+    "Poddanie się zepsuciu: gdy PZ > (BWt+BSW) wykonaj Odporność (+0); nieudany test → Mutacja Ciała/Umysłu. " +
+    "Niewolnik Chaosu: gdy Mutacje Cielesne > BWt lub Mutacje Umysłu > BSW → BN kontrolowany przez MG."
+},
   {
     id: "podpalenie",
     name: "PODPALENIE ^",
@@ -605,7 +653,7 @@ const SORT = {
 {
   id: "zaniepokojenie",
   name: "ZANIEPOKOJENIE",
-  tag: "psyche",
+  tag: "status",
   icon: "assets/icons/zaniepokojenie_icon.png",
   cardImg: "assets/cards/zaniepokojenie.png",
   text: "Premia +10 do Testów Percepcji, kara −10 do pozostałych Testów. Usuwane m.in. przez Panikę, minięcie zagrożenia, Test Opanowania (+20), zdolności usuwające Panikę lub Punkt Determinacji."
@@ -810,6 +858,14 @@ function highlightActiveSort(){
     els = {
       tabs: qa(".tab"),
       pages: { wallet: $("tab-wallet"), xp: $("tab-xp"), states: $("tab-states") },
+      calcHistory: $("calcHistory"),
+calcCustomInput: $("calcCustomInput"),
+btnCalcMinus: $("btnCalcMinus"),
+btnCalcPlus: $("btnCalcPlus"),
+btnCalcReset: $("btnCalcReset"),
+
+
+
 
       wP: $("wP"), wS: $("wS"), wZK: $("wZK"),
       cP: $("cP"), cS: $("cS"), cZK: $("cZK"),
@@ -944,13 +1000,38 @@ sortDirIcon: $("sortDirIcon"),
       };
       reader.readAsText(file);
     });
+// ---------- Mini calculator ----------
 
-    // Calculator
-    onAll(els.chips, "click", (e) => addCalc(Number(e.currentTarget.dataset.delta)));
-    on(els.btnCalcAdd, "click", () => addCalc(Number(els.calcCustom?.value || 0)));
-    on(els.btnCalcSub, "click", () => addCalc(-Number(els.calcCustom?.value || 0)));
-    on(els.btnCalcReset, "click", () => { calc = 0; renderCalc(); });
-    renderCalc();
+// szybkie przyciski (-25, +25 itd.)
+onAll(els.chips, "click", (e) => {
+  const d = Number(e.currentTarget.dataset.delta || 0);
+  if (d !== 0) addCalc(d);
+});
+
+// reset
+on(els.btnCalcReset, "click", resetCalc);
+
+// odczyt własnej liczby
+function readCustomDelta() {
+  const n = Math.trunc(Number(els.calcCustomInput?.value || 0));
+  return Number.isFinite(n) ? n : 0;
+}
+
+// plus
+on(els.btnCalcPlus, "click", () => {
+  const n = readCustomDelta();
+  if (n !== 0) addCalc(Math.abs(n));
+});
+
+// minus
+on(els.btnCalcMinus, "click", () => {
+  const n = readCustomDelta();
+  if (n !== 0) addCalc(-Math.abs(n));
+});
+
+// startowy render
+renderCalc();
+
 
     // PD table
     renderDevTable();

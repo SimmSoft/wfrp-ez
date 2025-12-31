@@ -7,21 +7,6 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <div class="sigil" aria-hidden="true"></div>
-      <div>
-        <div class="brand-title">WFRP4 Helper</div>
-        <div class="brand-sub">Sakiewka • PD • Stany</div>
-      </div>
-    </div>
-
-    <nav class="tabs" aria-label="Nawigacja">
-      <button class="tab is-active" data-tab="wallet">Sakiewka</button>
-      <button class="tab" data-tab="xp">PD / Rozwój</button>
-      <button class="tab" data-tab="states">Stany</button>
-    </nav>
-  </header>
 
   <main class="layout">
     <section class="main">
@@ -279,39 +264,59 @@
     </section>
 
     <!-- SIDE -->
+     
     <aside class="side">
+      <section class="card quick-nav sticky-nav">
+  <div class="quick-nav-row" aria-label="Nawigacja">
+    <button class="quick-btn is-active" type="button" data-jump="wallet">Sakiewka</button>
+    <button class="quick-btn" type="button" data-jump="xp">PD</button>
+    <button class="quick-btn" type="button" data-jump="states">Stany</button>
+  </div>
+</section>
       <section class="card sticky">
         <h2>Mini kalkulator</h2>
         <div class="calc">
-          <div class="calc-display">
-            <div class="muted small">Wartość robocza</div>
-            <div class="calc-value" id="calcValue">0</div>
-          </div>
+  <div class="calc-display">
+    <div class="calc-top">
+      <div class="calc-left">
+        <div class="muted small">Wartość robocza</div>
+        <div class="calc-value" id="calcValue">0</div>
+      </div>
 
-          <div class="calc-actions">
-            <button class="chip" data-delta="-25">-25</button>
-            <button class="chip" data-delta="-20">-20</button>
-            <button class="chip" data-delta="-15">-15</button>
-            <button class="chip" data-delta="-10">-10</button>
-            <button class="chip" data-delta="-5">-5</button>
+      <div class="calc-right">
+        <div class="muted small">Historia</div>
+        <div class="calc-history" id="calcHistory"></div>
+      </div>
+    </div>
+  </div>
 
-            <button class="chip" data-delta="5">+5</button>
-            <button class="chip" data-delta="10">+10</button>
-            <button class="chip" data-delta="15">+15</button>
-            <button class="chip" data-delta="20">+20</button>
-            <button class="chip" data-delta="25">+25</button>
-          </div>
-        </div>
+  <div class="calc-actions">
+    <button class="chip" data-delta="-25">-25</button>
+    <button class="chip" data-delta="-20">-20</button>
+    <button class="chip" data-delta="-15">-15</button>
+    <button class="chip" data-delta="-10">-10</button>
+    <button class="chip" data-delta="-5">-5</button>
+
+    <button class="chip" data-delta="5">+5</button>
+    <button class="chip" data-delta="10">+10</button>
+    <button class="chip" data-delta="15">+15</button>
+    <button class="chip" data-delta="20">+20</button>
+    <button class="chip" data-delta="25">+25</button>
+  </div>
+
+  <!-- Własna liczba: - [input] + -->
+  <div class="calc-custom">
+    <button class="calc-op calc-op-minus" id="btnCalcMinus" type="button" aria-label="Odejmij">−</button>
+    <input id="calcCustomInput" type="number" inputmode="numeric" step="1" value="0" />
+    <button class="calc-op calc-op-plus" id="btnCalcPlus" type="button" aria-label="Dodaj">+</button>
+  </div>
+
+  <!-- Reset -->
+  <button class="btn btn-ghost w100" id="btnCalcReset" type="button">Wyzeruj / Wyczyść</button>
+</div>
       </section>
 
-      <section class="card">
-        <h2>Szybkie skróty</h2>
-        <div class="quick">
-          <button class="btn btn-ghost w100" data-jump="wallet">Sakiewka</button>
-          <button class="btn btn-ghost w100" data-jump="xp">PD / Rozwój</button>
-          <button class="btn btn-ghost w100" data-jump="states">Stany</button>
-        </div>
-      </section>
+      
     </aside>
   </main>
 

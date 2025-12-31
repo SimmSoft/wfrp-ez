@@ -88,7 +88,7 @@ body{
 
 @media (min-width: 980px){
   .layout{ grid-template-columns: 1fr 360px; align-items:start; }
-  .sticky{ position: sticky; top: 110px; }
+  .sticky{ position: sticky; top: 78px; }
 }
 
 .panel{
@@ -949,3 +949,186 @@ input[type="number"]{
 @media (max-width: 360px){
   .money-inline{grid-template-columns: 1fr}
 }
+/* --- Mini kalkulator: stabilny przy scrollu --- */
+
+/* Desktop: sidebar zawsze „przyklejony” i nie rozwala UI */
+@media (min-width: 980px){
+  .side{
+    position: sticky;
+    top: 110px;
+    align-self: start;
+    max-height: calc(100vh - 130px);
+    overflow: auto;
+  }
+
+  /* opcjonalnie: żeby scroll w sidebarzie był bardziej czytelny */
+  .side::-webkit-scrollbar{ width: 10px; }
+  .side::-webkit-scrollbar-thumb{
+    background: rgba(255,255,255,0.10);
+    border-radius: 999px;
+  }
+}
+
+/* Mobile / wąsko: przyklej mini kalkulator, żeby nie „zjeżdżał” i nie psuł UI */
+@media (max-width: 979px){
+  .side .card.sticky{
+    position: sticky;
+    top: 86px; /* dopasowane pod topbar */
+    z-index: 15;
+  }
+}
+/* --- Calc: display z historią po prawej --- */
+.calc-top{
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) 170px; /* było 1fr 120px */
+  gap: 12px;
+  align-items: start;
+}
+
+
+.calc-right{
+  border-left: 1px solid rgba(255,255,255,0.08);
+  padding-left: 10px;
+  min-width: 0;
+}
+
+.calc-history{
+  margin-top: 6px;
+  max-height: 58px;
+  overflow: auto;
+  font-size: 12px;
+  color: rgba(170,178,189,.85);
+  line-height: 1.25;
+  min-width: 0;
+  overflow: hidden;  
+}
+
+.calc-history .hrow{
+  display:flex;
+  justify-content: space-between;
+   min-width: 0;
+  overflow: auto;
+  gap: 8px;
+  padding: 2px 0;
+  border-bottom: 1px dashed rgba(255,255,255,0.06);
+}
+
+.calc-history .hdelta{ opacity: .9; }
+.calc-history .hdelta.plus{ color: rgba(110, 190, 140, .9); }
+.calc-history .hdelta.minus{ color: rgba(195, 110, 110, .9); }
+
+.calc-history .hdelta,
+.calc-history .muted{
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.calc-history .muted{
+  text-align: right;
+  flex: 0 0 48px;  /* stała szerokość na wynik */
+}
+/* --- Calc: własna liczba --- */
+.calc-custom{
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  gap: 8px;
+  align-items: center;
+}
+
+.calc-custom input{
+  height: 44px;
+  border-radius: 14px;
+  font-weight: 900;
+  letter-spacing: .2px;
+}
+
+.calc-op{
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.92);
+  cursor: pointer;
+  font-weight: 950;
+  font-size: 18px;
+}
+
+.calc-op:hover{ filter: brightness(1.07); }
+
+/* Stonowane czerwony / zielony */
+.calc-op-minus{
+  border-color: rgba(161,58,58,.35);
+  background: rgba(161,58,58,.14);
+  color: rgba(255, 216, 216, .92);
+}
+
+.calc-op-plus{
+  border-color: rgba(70,170,120,.35);
+  background: rgba(70,170,120,.14);
+  color: rgba(214, 255, 230, .92);
+}
+/* Topbar out */
+.topbar{ display:none; } /* lub usuń cały blok z CSS */
+
+/* Sticky nav w sidebar */
+.sticky-nav{
+  position: sticky;
+  top: 14px; /* skoro topbar znika, możemy przykleić wyżej */
+  z-index: 30;
+}
+
+/* Nowy wygląd przycisków skrótów */
+.quick-nav{ padding: 12px; }
+.quick-nav-row{
+  display:flex;
+  gap:8px;
+}
+
+.quick-btn{
+  flex:1;
+  border:1px solid var(--line);
+  background: rgba(21,26,35,55);
+  color: var(--text);
+  padding: 10px 10px;
+  border-radius: 999px;
+  font-weight: 800;
+  cursor:pointer;
+  white-space: nowrap;
+}
+
+.quick-btn:hover{ filter: brightness(1.07); }
+
+.quick-btn.is-active{
+  border-color: rgba(199,164,85,45);
+  box-shadow: 0 0 0 2px rgba(199,164,85,12);
+  background: rgba(199,164,85,12);
+}
+/* --- FIX: historia nie wyjeżdża i nie robi scrolla na wierszach --- */
+.calc-history{
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+          /* żadnego poziomego/losowego scrolla */
+.calc-history .hdelta{
+  flex: 0 0 44px;            /* stała szerokość na +10/-25 */
+}
+
+/* Historia: 2 kolumny, bez wyjeżdżania na prawo */
+.calc-history .hrow{
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 56px 1fr;  /* lewa: +25, prawa: wynik */
+  align-items: center;
+  gap: 8px;
+}
+
+.calc-history .muted{
+  flex: 0 0 36px;  
+  text-align: right;
+  padding-right: 12px;              /* „odsuwa” od krawędzi */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
