@@ -237,16 +237,42 @@
       <section class="panel tabpage" id="tab-states">
         <div class="panel-head">
           <h1>Stany / Ściąga</h1>
-          <p class="muted">Wyszukuj po nazwie i rozwijaj detale.</p>
+          <p class="muted">Wyszukuj po nazwie i rozwijaj detale. [<span class="count-inline" id="stateCountInline">0</span> ]</p>
+
         </div>
 
         <div class="card">
-          <div class="search">
-            <div class="search-icon" aria-hidden="true"></div>
-            <input type="search" id="stateSearch" placeholder="Szukaj stanu (np. Panika, Zmęczenie, Strach)..." />
-          </div>
-          <div class="small muted" id="stateCount"></div>
-        </div>
+  <div class="search-row">
+    <div class="search">
+      <div class="search-icon"></div>
+      <input type="search" id="stateSearch"
+             placeholder="Szukaj stanu (np. Panika, Zmęczenie, Strach)..." />
+    </div>
+
+    <div class="states-toolbar">
+      <div class="sort-control" id="sortControl">
+  <div class="sort-pill" role="group" aria-label="Sortowanie">
+    <button class="sort-main" id="btnSortMode" type="button" aria-haspopup="true" aria-expanded="false">
+      <span class="sort-label" id="sortLabel">Alfabetycznie</span>
+    </button>
+
+    <span class="sort-sep" aria-hidden="true">|</span>
+
+    <button class="sort-dir" id="btnSortDir" type="button" aria-label="Zmień kierunek sortowania" title="Zmień kierunek">
+      <span id="sortDirIcon" aria-hidden="true">↑</span>
+    </button>
+  </div>
+
+  <div class="sort-menu is-hidden" id="sortMenu" role="menu" aria-label="Sortowanie">
+    <button class="sort-item" type="button" data-sort="name" role="menuitem">Alfabetycznie</button>
+    <button class="sort-item" type="button" data-sort="tag" role="menuitem">Według tagu</button>
+  </div>
+</div>
+    </div>
+  </div>
+
+  <div class="small muted" id="stateCount" style="display:none;"></div>
+</div>
 
         <div class="states" id="statesList" aria-label="Lista stanów"></div>
       </section>

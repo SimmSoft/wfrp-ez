@@ -315,6 +315,12 @@
   // icon: mała ikonka (lewy górny róg) — plik w projekcie
   // cardImg: pełna karta PNG — plik w projekcie
   // Zmieniasz nazwy w label, a w STATES używasz tylko key: "fight" | "psyche" | "status" | "rule"
+
+const SORT = {
+  mode: "name", // "name" | "tag"
+  dir: "asc"    // "asc" | "desc"
+};
+
     const TAGS = {
     fight:     { label: "Walka",      badgeClass: "badge--red" },
     psyche:    { label: "Psychologia",   badgeClass: "badge--yellow" },
@@ -642,14 +648,16 @@
     if (!els.statesList || !els.stateCount) return;
 
     const qText = (filterText || "").trim().toLowerCase();
-    const filtered = qText
+    let filtered = qText
       ? STATES.filter(s =>
           s.name.toLowerCase().includes(qText) ||
           s.tag.toLowerCase().includes(qText)
         )
       : STATES;
+      filtered = sortStates(filtered);
 
-    els.stateCount.textContent = `Widoczne: ${filtered.length} / ${STATES.length}`;
+    if (els.stateCountInline) els.stateCountInline.textContent = String(filtered.length);
+
 
     els.statesList.innerHTML = filtered.map(s => {
       const iconHtml = s.icon
@@ -701,6 +709,94 @@
       });
     });
   }
+  function sortStates(list){
+  const dirMul = (SORT.dir === "asc") ? 1 : -1;
+
+  const byName = (a,b) =>
+    a.name.localeCompare(b.name, "pl", { sensitivity:"base" });
+
+  if (SORT.mode === "tag") {
+    return list.slice().sort((a,b) => {
+      const ta = (a.tag || "").toString();
+      const tb = (b.tag || "").toString();
+
+      const tagCmp = ta.localeCompare(tb, "pl", { sensitivity:"base" });
+      if (tagCmp !== 0) return tagCmp * dirMul;
+
+      return byName(a,b) * dirMul;
+    });
+  }
+
+  return list.slice().sort((a,b) => byName(a,b) * dirMul);
+}
+  function setupSortUI(){
+  if (!els.btnSortMode || !els.sortMenu || !els.btnSortDir) return;
+
+  // otwieranie / zamykanie dropdown
+  els.btnSortMode.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleSortMenu(true);
+  });
+
+  // wybór trybu sortowania
+  els.sortMenu.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-sort]");
+    if (!btn) return;
+
+    SORT.mode = btn.getAttribute("data-sort"); // "name" lub "tag"
+    applySortLabels();
+    highlightActiveSort();
+    toggleSortMenu(false);
+
+    // przerysuj listę stanów
+    renderStates();
+  });
+
+  // kierunek sortowania (osobny przycisk)
+  els.btnSortDir.addEventListener("click", (e) => {
+    e.stopPropagation();
+    SORT.dir = (SORT.dir === "asc") ? "desc" : "asc";
+    applySortLabels();
+    renderStates();
+  });
+
+  // klik poza menu zamyka
+  document.addEventListener("click", () => toggleSortMenu(false));
+
+  // start
+  applySortLabels();
+  highlightActiveSort();
+}
+
+function toggleSortMenu(forceOpen){
+  const isHidden = els.sortMenu.classList.contains("is-hidden");
+  const open = (typeof forceOpen === "boolean") ? forceOpen : isHidden;
+
+  if (open) {
+    els.sortMenu.classList.remove("is-hidden");
+    els.btnSortMode.setAttribute("aria-expanded", "true");
+  } else {
+    els.sortMenu.classList.add("is-hidden");
+    els.btnSortMode.setAttribute("aria-expanded", "false");
+  }
+}
+
+function applySortLabels(){
+  if (!els.sortLabel || !els.sortDirIcon) return;
+
+  els.sortLabel.textContent =
+    (SORT.mode === "name") ? "Alfabetycznie" : "Według tagu";
+
+  els.sortDirIcon.textContent = (SORT.dir === "asc") ? "↑" : "↓";
+}
+
+function highlightActiveSort(){
+  if (!els.sortMenu) return;
+  els.sortMenu.querySelectorAll(".sort-item").forEach(b => {
+    b.classList.toggle("is-active", b.getAttribute("data-sort") === SORT.mode);
+  });
+}
+
 
   // ---------- Init ----------
   function init() {
@@ -739,12 +835,18 @@
 
       quickButtons: qa("[data-jump]"),
 
+      stateCountInline: $("stateCountInline"),
       stateSearch: $("stateSearch"),
       statesList: $("statesList"),
       stateCount: $("stateCount"),
 
       segs: qa(".seg"),
-
+sortControl: $("sortControl"),
+btnSortMode: $("btnSortMode"),
+btnSortDir: $("btnSortDir"),
+sortMenu: $("sortMenu"),
+sortLabel: $("sortLabel"),
+sortDirIcon: $("sortDirIcon"),
       // State card modal
       stateCardModal: $("stateCardModal"),
       stateCardBackdrop: $("stateCardBackdrop"),
@@ -848,6 +950,7 @@
 
     // States
     on(els.stateSearch, "input", (e) => renderStates(e.target.value));
+    setupSortUI(); 
     renderStates("");
   }
 

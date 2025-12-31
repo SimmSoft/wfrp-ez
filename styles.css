@@ -467,6 +467,11 @@ input[type="number"]{
 .chip:hover{filter:brightness(1.07)}
 
 /* Search + states */
+.count-inline{
+  margin-left: 6px;
+  opacity: .85;
+  font-weight: 600;
+}
 .search{
   display:flex;
   align-items:center;
@@ -498,6 +503,59 @@ input[type="number"]{
   padding: 6px 0;
   box-shadow:none;
 }
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search-row .search {
+  flex: 1;
+}
+.sort-control { position: relative; }
+
+.sort-pill{
+  display: flex;
+  align-items: center;
+  height: 42px;
+  border-radius: 14px;
+  overflow: hidden; /* jeden wspólny box */
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.sort-main,
+.sort-dir{
+  height: 42px;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.sort-main{
+  padding: 0 14px;
+  font-weight: 600;
+}
+
+.sort-sep{
+  opacity: .35;
+  user-select: none;
+}
+
+.sort-dir{
+  width: 42px;
+  justify-content: center;
+}
+
+.sort-main:hover,
+.sort-dir:hover{
+  background: rgba(255,255,255,0.06);
+}
+
+
 .states{padding: 0 16px 16px; display:flex; flex-direction:column; gap:10px}
 .state{
   border:1px solid var(--line);
@@ -516,6 +574,92 @@ input[type="number"]{
   gap:10px;
 }
 .state summary::-webkit-details-marker{display:none}
+
+.states-toolbar{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:10px;
+}
+
+.sort-control{
+  position:relative;
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.sort-main, .sort-dir{
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.92);
+  border-radius: 12px;
+  height: 34px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding: 0 10px;
+  cursor:pointer;
+  user-select:none;
+}
+
+.sort-main{
+  padding-right:12px;
+}
+
+.sort-ico{
+  opacity:0.85;
+  width:18px;
+  text-align:center;
+}
+
+.sort-label{
+  font-size: 13px;
+  font-weight: 600;
+  opacity:0.95;
+}
+
+.sort-dir{
+  width:36px;
+  justify-content:center;
+  padding:0;
+}
+
+.sort-menu{
+  position:absolute;
+  right:0;
+  top: 40px;
+  min-width: 220px;
+  background: rgba(20,24,30,0.95);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 14px;
+  padding: 6px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  z-index: 50;
+}
+
+.sort-menu.is-hidden{ display:none; }
+
+.sort-item{
+  width:100%;
+  text-align:left;
+  padding:10px 10px;
+  border-radius: 10px;
+  background: transparent;
+  border: 0;
+  color: rgba(255,255,255,0.92);
+  cursor:pointer;
+  font-size: 13px;
+}
+
+.sort-item:hover{
+  background: rgba(255,255,255,0.06);
+}
+
+.sort-item.is-active{
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
 /* --- Tag colors (badge variants) --- */
 .badge{
   font-size:12px;
