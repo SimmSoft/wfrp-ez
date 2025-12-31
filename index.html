@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WFRP4 Helper – Sakiewka • PD • Stany</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="sigil" aria-hidden="true"></div>
+      <div>
+        <div class="brand-title">WFRP4 Helper</div>
+        <div class="brand-sub">Sakiewka • PD • Stany</div>
+      </div>
+    </div>
+
+    <nav class="tabs" aria-label="Nawigacja">
+      <button class="tab is-active" data-tab="wallet">Sakiewka</button>
+      <button class="tab" data-tab="xp">PD / Rozwój</button>
+      <button class="tab" data-tab="states">Stany</button>
+    </nav>
+  </header>
+
+  <main class="layout">
+    <section class="main">
+
+      <!-- WALLET -->
+      <section class="panel tabpage is-active" id="tab-wallet">
+        <div class="panel-head panel-head-row">
+          <div>
+            <h1>Sakiewka i przelicznik monet</h1>
+            <p class="muted">
+              Kurs: <strong>1 S = 12 P</strong>, <strong>1 ZK = 20 S = 240 P</strong>.
+            </p>
+          </div>
+
+          <!-- SETTINGS (gear) -->
+          <button class="icon-btn" id="btnOpenSettings" aria-label="Ustawienia sakiewki" title="Ustawienia">
+            <span class="gear" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        <div class="section-pad">
+          <!-- Stan sakiewki -->
+          <div class="card">
+            <h2>Stan sakiewki</h2>
+
+            <div class="money-inline">
+              <div class="money-field">
+                <span class="coin-tag coin-p">P</span>
+                <input inputmode="numeric" type="number" min="0" step="1" id="wP" />
+              </div>
+
+              <div class="money-field">
+                <span class="coin-tag coin-s">S</span>
+                <input inputmode="numeric" type="number" min="0" step="1" id="wS" />
+              </div>
+
+              <div class="money-field">
+                <span class="coin-tag coin-zk">ZK</span>
+                <input inputmode="numeric" type="number" min="0" step="1" id="wZK" />
+              </div>
+            </div>
+
+            <div class="hint">
+              Wpisz stan sakiewki. Operacje poniżej automatycznie przeliczą monety w tle.
+            </div>
+          </div>
+
+          <!-- Operacja -->
+          <div class="card">
+            <h2>Operacja na sakiewce</h2>
+
+            <div class="segmented segmented-wide" role="tablist" aria-label="Tryb operacji">
+              <button class="seg seg-spend is-active" data-mode="spend" role="tab">Wydaj</button>
+              <button class="seg seg-add" data-mode="add" role="tab">Dodaj</button>
+            </div>
+
+            <div class="money-inline">
+              <div class="money-field">
+                <span class="coin-tag coin-p">P</span>
+                <input inputmode="numeric" type="number" min="0" step="1" id="cP" value="0" />
+              </div>
+
+              <div class="money-field">
+                <span class="coin-tag coin-s">S</span>
+                <input inputmode="numeric" type="number" min="0" step="1" id="cS" value="0" />
+              </div>
+
+              <div class="money-field">
+                <span class="coin-tag coin-zk">ZK</span>
+                <input inputmode="numeric" type="number" min="0" step="1" id="cZK" value="0" />
+              </div>
+            </div>
+
+            <div class="row">
+              <button class="btn btn-primary w100" id="btnApply">Zastosuj</button>
+            </div>
+
+            <!-- Ukryte dopóki nie ma wyniku -->
+            <div id="walletResult" class="result is-hidden" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- XP / DEVELOPMENT -->
+      <section class="panel tabpage" id="tab-xp">
+        <div class="panel-head">
+          <h1>PD / Rozwój</h1>
+          <p class="muted">Szybki podgląd kosztów z tabeli oraz reguł rozwijania Talentów i Profesji.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h2>Koszt rozwoju Cech i Umiejętności (PD)</h2>
+            <div class="table-wrap">
+              <table class="tbl" id="tblDev">
+                <thead>
+                  <tr>
+                    <th>Rozwinięcia</th>
+                    <th>Cechy</th>
+                    <th>Umiejętności</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+          
+          </div>
+<div class="card">
+    <h2>Z profesji postaci</h2>
+
+    <div class="callout">
+        <div class="callout-title">Talenty</div>
+        <div class="callout-text">
+            Każde rozwinięcie Talentu kosztuje <strong>100 PD</strong>, powiększone o
+            <strong>100 PD</strong> za każde wcześniej wykupione rozwinięcie tego samego Talentu.
+            <br><br>
+            <strong>Przykłady:</strong><br>
+            • 1 lvl rozwinięcia Talentu – <strong>100 PD</strong><br>
+            • z 1 lvl -> 2 lvl rozwinięcia – <strong>200 PD</strong><br>
+            • z 2 lvl -> 3 lvl rozwinięcia – <strong>300 PD</strong>
+        </div>
+    </div>
+
+            <hr class="sep" />
+<h2>Poza profesją postaci</h2>
+<div class="callout">
+  
+  <div class="callout-title">Umiejętności</div>
+  <div class="callout-text">
+    <ul class="bullets">
+      <li><strong>Nowa umiejętność bez nauczyciela za samo PD ale podwójny koszt</strong> i musi być logicznie możliwe bez nauczyciela (ustal z GameMasterem).</li>
+      <li><strong>Z nauczycielem</strong> – płacisz <strong>normalną cenę<i> *patrz tabelke obok</i></strong> PD, ale musisz znaleźć kogoś, kto może nauczyć (może wymagać zapłaty/ można po znajomości / bierz pod uwagę swoją reputacje).</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout" style="margin-top:12px;">
+  <div class="callout-title">Talenty</div>
+  <div class="callout-text">
+    <ul class="bullets">
+      <li>Wykorzystujesz <strong>zajęcie</strong> i masz szansę, że się tego nauczysz; jeśli się uda — płacisz tyle PD, ile zwykle kosztuje wykupienie/ulepszenie talentu.</li>
+    </ul>
+  </div>
+</div>
+
+          </div>
+        </div>
+
+        <!-- DODANE: skrót z kartki -->
+        <div class="card card-pad">
+          <h2>Wymogi wskoczenia na wyższy poziom profesji</h2>
+
+          <div class="callout">
+            <div class="callout-text">
+              <ul class="bullets">
+                <li><strong>Wykupić Minimum 1 Talent</strong> z każdego nowego „Rozwinięcia” profesji.</li>
+                <li><strong>wykupić 8 spośród Umiejętności zamalowanych ⬛ </strong> na odpowiedni poziom według tabelki poniżej</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="two-cols">
+              <!-- LEWA STRONA: tabela -->
+  <div class="boxed">
+    <div class="boxed-title">Poziom → Rozwinięcia (łącznie)</div>
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Poziom</th>
+            <th>Rozwinięcia (łącznie)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>5</td></tr>
+          <tr><td>2</td><td>10</td></tr>
+          <tr><td>3</td><td>15</td></tr>
+          <tr><td>4</td><td>20</td></tr>
+        </tbody>edas
+      </table>
+    </div>
+  </div>
+
+  <!-- PRAWA STRONA: koszty -->
+  <div class="boxed">
+    <div class="boxed-title">Zmiana profesji / klasy</div>
+
+    <div class="list">
+      <div class="list-item">
+        <div class="li-title">Opuszczenie profesji (ukończonej)</div>
+        <div class="li-value">100 PD</div>
+      </div>
+
+      <div class="list-item">
+        <div class="li-title">Opuszczenie profesji (nieukończonej)</div>
+        <div class="li-value">200 PD</div>
+      </div>
+
+      <div class="list-item">
+        <div class="li-title">Przejście do innej klasy (dodatkowo wydajesz)</div>
+        <div class="li-value">100 PD</div>
+      </div>
+    </div>
+  </div>
+
+
+          </div>
+        </div>
+      </section>
+
+      <!-- STATES -->
+      <section class="panel tabpage" id="tab-states">
+        <div class="panel-head">
+          <h1>Stany / Ściąga</h1>
+          <p class="muted">Wyszukuj po nazwie i rozwijaj detale.</p>
+        </div>
+
+        <div class="card">
+          <div class="search">
+            <div class="search-icon" aria-hidden="true"></div>
+            <input type="search" id="stateSearch" placeholder="Szukaj stanu (np. Panika, Zmęczenie, Strach)..." />
+          </div>
+          <div class="small muted" id="stateCount"></div>
+        </div>
+
+        <div class="states" id="statesList" aria-label="Lista stanów"></div>
+      </section>
+    </section>
+
+    <!-- SIDE -->
+    <aside class="side">
+      <section class="card sticky">
+        <h2>Mini kalkulator</h2>
+        <div class="calc">
+          <div class="calc-display">
+            <div class="muted small">Wartość robocza</div>
+            <div class="calc-value" id="calcValue">0</div>
+          </div>
+
+          <div class="calc-actions">
+            <button class="chip" data-delta="-25">-25</button>
+            <button class="chip" data-delta="-20">-20</button>
+            <button class="chip" data-delta="-15">-15</button>
+            <button class="chip" data-delta="-10">-10</button>
+            <button class="chip" data-delta="-5">-5</button>
+
+            <button class="chip" data-delta="5">+5</button>
+            <button class="chip" data-delta="10">+10</button>
+            <button class="chip" data-delta="15">+15</button>
+            <button class="chip" data-delta="20">+20</button>
+            <button class="chip" data-delta="25">+25</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Szybkie skróty</h2>
+        <div class="quick">
+          <button class="btn btn-ghost w100" data-jump="wallet">Sakiewka</button>
+          <button class="btn btn-ghost w100" data-jump="xp">PD / Rozwój</button>
+          <button class="btn btn-ghost w100" data-jump="states">Stany</button>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <!-- SETTINGS MODAL -->
+  <div class="modal is-hidden" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal-backdrop" id="settingsBackdrop"></div>
+
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <div class="modal-title" id="settingsTitle">Ustawienia sakiewki</div>
+          <div class="modal-sub muted small">Minimalnie, ale użytecznie.</div>
+        </div>
+        <button class="icon-btn" id="btnCloseSettings" aria-label="Zamknij ustawienia" title="Zamknij">
+          <span class="xmark" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="setting-row">
+          <div class="setting-text">
+            <div class="setting-name">Autopodmienianie stanu sakiewki</div>
+            <div class="setting-desc muted small">
+              ON: po „Zastosuj” aktualizuje stan sakiewki u góry. OFF: nie zmienia stanu, tylko pokazuje wynik.
+            </div>
+          </div>
+          <label class="switch" aria-label="Autopodmienianie">
+            <input type="checkbox" id="toggleAutoApply" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <hr class="sep" />
+
+        <div class="setting-actions">
+          <button class="btn btn-primary" id="btnSaveWallet">Zapisz</button>
+          <button class="btn btn-ghost btn-danger-outline" id="btnResetWallet">Reset</button>
+        </div>
+
+        <div class="boxed" style="margin-top:12px;">
+          <div class="boxed-title">Eksport (JSON)</div>
+          <div class="boxed-text muted small">Skopiuj zapis do schowka albo wyślij komuś.</div>
+          <textarea class="area" id="ioArea" rows="6" spellcheck="false" placeholder='{"wallet":{"p":0,"s":0,"zk":0},"settings":{"autoApply":true}}'></textarea>
+
+          <div class="row">
+            <button class="btn btn-primary" id="btnExport">Eksportuj</button>
+            <button class="btn btn-ghost" id="btnCopy">Kopiuj</button>
+            <button class="btn btn-ghost" id="btnImport">Importuj</button>
+            <label class="btn btn-ghost file-btn">
+              Import z pliku
+              <input type="file" id="fileImport" accept="application/json" />
+            </label>
+          </div>
+
+          <div id="settingsMsg" class="result is-hidden" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
