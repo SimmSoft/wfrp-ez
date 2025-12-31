@@ -220,6 +220,7 @@
     const change = readChangeInputs();
 
     const beforeTotal = toTotalP(wallet);
+    const before = fromTotalP(beforeTotal);
     const changeTotal = toTotalP(change);
 
     if (changeTotal === 0) {
@@ -249,12 +250,18 @@
       : `<br/><span class="muted small">Auto-podmienianie OFF — stan sakiewki u góry nie został zmieniony.</span>`;
 
     setResult(`
-      <div class="ok">
-        <strong>${escapeHtml(actionLabel)}:</strong> <strong>${escapeHtml(fmtMoney(changeNorm))}</strong><br/>
-        <span class="muted small">Nowy stan (wynik):</span> <strong>${escapeHtml(fmtMoney(after))}</strong>
-        ${note}
-      </div>
-    `);
+  <div class="ok">
+    <div class="muted small" style="margin-bottom:4px;">
+      Stan przed operacją: <strong>${escapeHtml(fmtMoney(before))}</strong>
+    </div>
+
+    <strong>${escapeHtml(actionLabel)}:</strong>
+    <strong>${escapeHtml(fmtMoney(changeNorm))}</strong><br/>
+    <span class="muted small">Nowy stan (wynik):</span>
+    <strong>${escapeHtml(fmtMoney(after))}</strong>
+    ${note}
+  </div>
+`);
   }
 
   // ---------- Modal (Settings) ----------

@@ -112,6 +112,21 @@ body{
   font-size:20px;
   letter-spacing:.2px;
 }
+/* Wallet: ustawienia w prawym górnym rogu panelu */
+#tab-wallet{
+  position: relative; /* kotwica dla przycisku */
+}
+
+#tab-wallet .panel-head-row{
+  padding-right: 56px; /* robi miejsce, żeby nie nachodziło na tekst */
+}
+
+#btnOpenSettings{
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+}
 .muted{color:var(--muted)}
 .small{font-size:12px}
 
